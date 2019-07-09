@@ -44,10 +44,16 @@ module Enumerable
   end
 
   def my_count(arg = nil)
-    return my_select { |e| yield e }.length if block_given?
+    return my_select { |e| yield(e) }.length if block_given?
     return my_select { |e| e == 3 }.length unless arg.nil?
 
     length
+  end
+
+  def my_map(proc = nil)
+    res = []
+    proc ? my_each { |e| res << proc.call(e) } : my_each { |e| res << yield(e) }
+    res
   end
 end
 
@@ -114,10 +120,17 @@ p(my_array.my_count)
 puts ''
 
 # MAP
+puts 'MAP e**2'
 p(my_array.map { |e| e**2 })
+puts 'MY_MAP e**2'
 p(my_array.my_map { |e| e**2 })
 proc = proc { |e| e**2 }
-p(my_array.my_map(proc))
+puts ''
+puts 'MAP proc'
+p(my_array.map(&proc))
+puts 'MY_MAP proc'
+p(my_array.my_map(&proc))
+puts ''
 
 # INJECT
 p(my_array.inject(:+))
