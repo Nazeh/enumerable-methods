@@ -16,8 +16,8 @@ module Enumerable
 
   def my_select
     res = []
-    length.times do |i|
-      yield(self[i]) ? res << self[i] : res
+    my_each do |e|
+      yield(e) ? res << e : res
     end
     res
   end
