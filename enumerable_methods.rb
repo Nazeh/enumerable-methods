@@ -21,6 +21,31 @@ module Enumerable
     end
     res
   end
+
+  def my_all?
+    my_each do |e|
+      return false unless yield(e)
+    end
+    return true
+  end
+
+  def my_any?
+    res = false
+    my_each do |e|
+      if yield(e)
+        res = true
+        break
+      end
+    end
+    res
+  end
+
+  def my_none?
+    my_each do |e|
+      return false if yield(e)
+    end
+    return true
+  end
 end
 
 # testcase
@@ -48,16 +73,25 @@ p(my_array.my_select(&:even?))
 puts ' '
 
 # ALL?
-p(my_array.all? { |e| e > 1 })
-p(my_array.my_all? { |e| e > 1 })
+puts 'ALL? > 3'
+p(my_array.all? { |e| e > 3 })
+puts 'MY_ALL? > 3'
+p(my_array.my_all? { |e| e > 3 })
+puts ' '
 
 # ANY?
-p(my_array.any? { |e| e < 1 })
-p(my_array.my_any? { |e| e < 1 })
+puts 'ANY? < 2'
+p(my_array.any? { |e| e < 2 })
+puts 'MY_ANY? < 2'
+p(my_array.my_any? { |e| e < 2 })
+puts ''
 
 # NONE?
-p(my_array.none? { |e| e > 1 })
-p(my_array.my_none? { |e| e > 1 })
+puts 'NONE? < 2'
+p(my_array.none? { |e| e < 2 })
+puts 'MY_NONE? < 2'
+p(my_array.my_none? { |e| e < 2 })
+puts ''
 
 # COUNT
 p(my_array.count(&:odd?))
