@@ -42,6 +42,13 @@ module Enumerable
     end
     true
   end
+
+  def my_count(arg = nil)
+    return my_select { |e| yield e }.length if block_given?
+    return my_select { |e| e == 3 }.length unless arg.nil?
+
+    length
+  end
 end
 
 # testcase
@@ -90,14 +97,20 @@ p(my_array.my_none? { |e| e < 2 })
 puts ''
 
 # COUNT
-puts 'COUNT odd'
+puts 'COUNT(&:odd?)'
 p(my_array.count(&:odd?))
-puts 'MY_COUNT odd'
+puts 'MY_COUNT(&:odd?)'
 p(my_array.my_count(&:odd?))
-puts 'COUNT = 3'
+puts ''
+puts 'COUNT(3)'
 p(my_array.count(3))
-puts 'MY_COUNT = 3'
+puts 'MY_COUNT(3)'
 p(my_array.my_count(3))
+puts ''
+puts 'COUNT'
+p(my_array.count)
+puts 'MY_COUNT'
+p(my_array.my_count)
 puts ''
 
 # MAP
