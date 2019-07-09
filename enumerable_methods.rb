@@ -3,24 +3,41 @@
 # Enumerable module
 module Enumerable
   def my_each
-    # code here
+    length.times do |i|
+      yield(self[i])
+    end
+  end
+
+  def my_each_with_index
+    length.times do |i|
+      yield(self[i], i)
+    end
   end
 end
 
 # testcase
-my_array = (1..4).to_a
+my_array = Array.new(4) { rand(1...9) }
 
 # EACH
+puts 'EACH'
 my_array.each { |e| p e }
-my_array.my_each { |e| p e * 2 }
+puts 'MY_EACH'
+my_array.my_each { |e| p e }
+puts ''
 
 # EACH_WITH_INDEX
-my_array.each_with_index { |_e, _i| p 'element: # {e}, index: # {i}' }
-my_array.my_each_with_index { |_e, _i| p 'element: # {e}, index: # {i}' }
+puts 'EACH_WITH_INDEX'
+my_array.each_with_index { |e, i| p "element: #{e}, index: #{i}" }
+puts 'MY_EACH_WITH_INDEX'
+my_array.my_each_with_index { |e, i| p "element: #{e}, index: #{i}" }
+puts ''
 
 # SELECT
+puts 'SELECT'
 p(my_array.select(&:even?))
+puts 'MY_SELECT'
 p(my_array.my_select(&:even?))
+puts ''
 
 # ALL?
 p(my_array.all? { |e| e > 1 })
