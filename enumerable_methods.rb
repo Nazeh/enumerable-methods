@@ -55,6 +55,17 @@ module Enumerable
     proc ? my_each { |e| res << proc.call(e) } : my_each { |e| res << yield(e) }
     res
   end
+
+  def my_inject(memo = nil, sym = nil)
+    # make sure it can take custom memo and symbol procs like :+
+    if memo.is_a? Symbol
+      sym = memo
+      memo = nil
+    end
+    my_each { |e| memo = memo.nil? ? first : yield(memo, e) } if block_given?
+    my_each { |e| memo = memo.nil? ? first : sym.to_proc.call(memo, e) } unless sym.nil?
+    memo
+  end
 end
 
 # testcase
@@ -133,12 +144,23 @@ p(my_array.my_map(&proc))
 puts ''
 
 # INJECT
-p(my_array.inject(:+))
-p(my_array.my_inject(:+))
+puts 'INJECT(1) product n'
 p(my_array.inject(1) { |product, n| product * n })
-p(my_array.my_inject(1) { |product, n| product * n })
-p(my_array.inject(1, :*))
-p(my_array.my_inject(1, :*))
+puts 'MY_INJECT(2) product n'
+p(my_array.my_inject(2) { |product, n| product * n })
+puts ''
+puts 'INJECT sum, n'
 p(my_array.inject { |sum, n| sum + n })
+puts 'MY_INJECT sum, n'
 p(my_array.my_inject { |sum, n| sum + n })
-p multiply_els([2, 4, 5])
+puts ''
+puts 'INJECT :+'
+p(my_array.inject(:+))
+puts 'MY_INJECT :+'
+p(my_array.my_inject(:+))
+puts ''
+puts 'INJECT (1, :*)'
+p(my_array.inject(1, :*))
+puts 'MY_INJECT (1, :*)'
+p(my_array.my_inject(1, :*))
+puts ''
