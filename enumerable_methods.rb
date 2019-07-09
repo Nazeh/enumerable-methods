@@ -17,7 +17,7 @@ module Enumerable
   def my_select
     res = []
     my_each do |e|
-      yield(e) ? res << e : res
+      res << e if yield(e)
     end
     res
   end
@@ -26,25 +26,21 @@ module Enumerable
     my_each do |e|
       return false unless yield(e)
     end
-    return true
+    true
   end
 
   def my_any?
-    res = false
     my_each do |e|
-      if yield(e)
-        res = true
-        break
-      end
+      return true if yield(e)
     end
-    res
+    false
   end
 
   def my_none?
     my_each do |e|
       return false if yield(e)
     end
-    return true
+    true
   end
 end
 
@@ -94,10 +90,15 @@ p(my_array.my_none? { |e| e < 2 })
 puts ''
 
 # COUNT
+puts 'COUNT odd'
 p(my_array.count(&:odd?))
+puts 'MY_COUNT odd'
 p(my_array.my_count(&:odd?))
+puts 'COUNT = 3'
 p(my_array.count(3))
+puts 'MY_COUNT = 3'
 p(my_array.my_count(3))
+puts ''
 
 # MAP
 p(my_array.map { |e| e**2 })
