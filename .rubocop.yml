@@ -6,8 +6,3 @@ Metrics/LineLength:
 # the code easier to read (by naming things), but can also clutter the class
 Metrics/MethodLength: 
   Max: 20
-
-# Get rid of the paranthesize issue
-Lint/AmbiguousBlockAssociation:
-  Exclude:
-    - "spec/**/*"
