@@ -13,6 +13,14 @@ module Enumerable
       yield(self[i], i)
     end
   end
+
+  def my_select
+    res = []
+    length.times do |i|
+      yield(self[i]) ? res << self[i] : res
+    end
+    res
+  end
 end
 
 # testcase
@@ -37,7 +45,7 @@ puts 'SELECT'
 p(my_array.select(&:even?))
 puts 'MY_SELECT'
 p(my_array.my_select(&:even?))
-puts ''
+puts ' '
 
 # ALL?
 p(my_array.all? { |e| e > 1 })
