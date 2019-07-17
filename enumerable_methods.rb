@@ -3,14 +3,18 @@
 # Enumerable module
 module Enumerable
   def my_each
-    length.times do |i|
-      yield(self[i])
+    if instance_of? Hash
+      (array = to_a).length.times { |i| yield([array[i].first, array[i].last]) }
+    else
+      length.times { |i| yield(self[i]) }
     end
   end
 
   def my_each_with_index
-    length.times do |i|
-      yield(self[i], i)
+    if instance_of? Hash
+      (array = to_a).length.times { |i| yield([array[i].first, array[i].last], i) }
+    else
+      length.times { |i| yield(self[i], i) }
     end
   end
 
@@ -70,6 +74,7 @@ end
 
 # testcase
 my_array = Array.new(4) { rand(1...9) }
+my_hash = { a: 1, b: 2, c: 3, d: 4 }
 
 # EACH
 puts 'EACH'
@@ -78,11 +83,25 @@ puts 'MY_EACH'
 my_array.my_each { |e| p e }
 puts ''
 
+# Each with Hashes!
+puts 'EACH hash'
+my_hash.each { |k, v| p "#{k}: #{v}" }
+puts 'My_EACH hash'
+my_hash.my_each { |k, v| p "#{k}: #{v}" }
+puts ''
+
 # EACH_WITH_INDEX
 puts 'EACH_WITH_INDEX'
 my_array.each_with_index { |e, i| p "element: #{e}, index: #{i}" }
 puts 'MY_EACH_WITH_INDEX'
 my_array.my_each_with_index { |e, i| p "element: #{e}, index: #{i}" }
+puts ''
+
+# Each_WITH_INDEX with Hashes!
+puts 'EACH_WITH_INDEX hash'
+my_hash.each_with_index { |(k, v), i| p "#{k}: #{v} || i: #{i}" }
+puts 'EACH_WITH_INDEX hash'
+my_hash.my_each_with_index { |(k, v), i| p "#{k}: #{v} || i: #{i}" }
 puts ''
 
 # SELECT
