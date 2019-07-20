@@ -20,37 +20,28 @@ module Enumerable
 
   def my_select
     res = []
-    my_each do |e|
-      res << e if yield(e)
-    end
+    my_each { |e| res << e if yield(e) }
     res
   end
 
   def my_all?
-    my_each do |e|
-      return false unless yield(e)
-    end
+    my_each { |e| return false unless yield(e) }
     true
   end
 
   def my_any?
-    my_each do |e|
-      return true if yield(e)
-    end
+    my_each { |e| return true if yield(e) }
     false
   end
 
   def my_none?
-    my_each do |e|
-      return false if yield(e)
-    end
+    my_each { |e| return false if yield(e) }
     true
   end
 
   def my_count(arg = nil)
     return my_select { |e| yield(e) }.length if block_given?
-    return my_select { |e| e == 3 }.length unless arg.nil?
-
+    return my_select { |e| e == arg }.length unless arg.nil?
     length
   end
 

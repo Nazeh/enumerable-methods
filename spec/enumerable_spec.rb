@@ -2,6 +2,6 @@
 
 require_relative '../enumerable_methods'
 
-RSpec describe Enumerable do
+RSpec.describe Enumerable do
   
 end
