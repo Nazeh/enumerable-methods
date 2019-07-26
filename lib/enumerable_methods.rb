@@ -3,11 +3,13 @@
 # Enumerable module
 module Enumerable
   def my_each
+    return self.to_enum unless block_given?
     if instance_of? Hash
       (array = to_a).length.times { |i| yield([array[i].first, array[i].last]) }
     else
       length.times { |i| yield(self[i]) }
     end
+    self
   end
 
   def my_each_with_index
