@@ -5,7 +5,7 @@ module Enumerable
   def my_each
     return to_my_enum unless block_given?
 
-    (array = to_a).length.times { |i| yield(array[i].first, array[i].last, i) } if instance_of? Hash
+    to_a.my_each { |e, i| yield([e.first, e.last], i) } if instance_of? Hash
     length.times { |i| yield(self[i], i) } if instance_of? Array
     self
   end
@@ -14,37 +14,50 @@ module Enumerable
     unless block_given?
       # need to add index to an array before onverting it to Enumerator
       res = []
-      my_each_with_index { |(k, v), i| res << [[k, v], i] } if instance_of? Hash
-      my_each_with_index { |e, i| res << [e, i] } if instance_of? Array
+      my_each { |e, i| res << [e, i] }
       return res.to_my_enum
     end
 
-    return my_each { |e, i| yield(e, i) } if instance_of? Array
-
-    my_each { |k, v, i| yield([k, v], i) } if instance_of? Hash
+    my_each { |e, i| yield(e, i) }
   end
 
-  # converts an array to Enumerator, because I think it uses #each
+  # converts an array to Enumerator, because it uses #each
   def to_my_enum
-    Enumerator.new do |y|
-      my_each { |e| y << e } if instance_of? Array
-      my_each { |k, v| y << [k, v] } if instance_of? Hash
-    end
+    Enumerator.new { |y| my_each { |e| y << e } }
   end
 
   def my_select
+    return to_my_enum unless block_given?
+
     res = []
     my_each { |e| res << e if yield(e) }
-    res
+
+    instance_of?(Hash) ? res.to_h : res
   end
 
-  def my_all?
+  def my_all?(pattern = nil)
+    unless pattern.nil?
+      return false if instance_of?(Hash)
+
+      return my_all? { |e| pattern.match(e) }
+    end
+
+    return my_all? { |e| e } unless block_given?
+
     my_each { |e| return false unless yield(e) }
     true
   end
 
-  def my_any?
-    my_each { |e| return true if yield(e) }
+  def my_any?(pattern = nil)
+    unless pattern.nil?
+      return false if instance_of?(Hash)
+
+      return my_any? { |e| !pattern.match(e) }
+    end
+
+    return my_any?(&:!) unless block_given?
+
+    my_each { |e| return true unless yield(e) }
     false
   end
 
