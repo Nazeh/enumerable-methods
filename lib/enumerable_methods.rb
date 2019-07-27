@@ -3,20 +3,32 @@
 # Enumerable module
 module Enumerable
   def my_each
-    return self.to_enum unless block_given?
-    if instance_of? Hash
-      (array = to_a).length.times { |i| yield([array[i].first, array[i].last]) }
-    else
-      length.times { |i| yield(self[i]) }
-    end
+    return to_my_enum unless block_given?
+
+    (array = to_a).length.times { |i| yield(array[i].first, array[i].last, i) } if instance_of? Hash
+    length.times { |i| yield(self[i], i) } if instance_of? Array
     self
   end
 
   def my_each_with_index
-    if instance_of? Hash
-      (array = to_a).length.times { |i| yield([array[i].first, array[i].last], i) }
-    else
-      length.times { |i| yield(self[i], i) }
+    unless block_given?
+      # need to add index to an array before onverting it to Enumerator
+      res = []
+      my_each_with_index { |(k, v), i| res << [[k, v], i] } if instance_of? Hash
+      my_each_with_index { |e, i| res << [e, i] } if instance_of? Array
+      return res.to_my_enum
+    end
+
+    return my_each { |e, i| yield(e, i) } if instance_of? Array
+
+    my_each { |k, v, i| yield([k, v], i) } if instance_of? Hash
+  end
+
+  # converts an array to Enumerator, because I think it uses #each
+  def to_my_enum
+    Enumerator.new do |y|
+      my_each { |e| y << e } if instance_of? Array
+      my_each { |k, v| y << [k, v] } if instance_of? Hash
     end
   end
 
@@ -44,6 +56,7 @@ module Enumerable
   def my_count(arg = nil)
     return my_select { |e| yield(e) }.length if block_given?
     return my_select { |e| e == arg }.length unless arg.nil?
+
     length
   end
 
