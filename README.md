@@ -47,6 +47,7 @@ cd enumerable-methods
 ```console
 rspec
 ```
+See result in [Specs.md](Specs.md)
 
 ## Live version
 
