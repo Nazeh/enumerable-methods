@@ -85,7 +85,7 @@ RSpec.describe Enumerable do
       context 'when no block is given' do
         it 'will always return true' do
           expect({}.my_all?).to be true
-          expect({a: false, b: nil}.my_all?).to be true
+          expect({ a: false, b: nil }.my_all?).to be true
         end
       end
     end
@@ -122,11 +122,11 @@ RSpec.describe Enumerable do
       end
 
       it 'will return false if the block ever returns true.' do
-        expect(hash.my_none?{ |(_k, v)| v.even? }).to be false
+        expect(hash.my_none? { |(_k, v)| v.even? }).to be false
       end
 
       it 'will return true if hash is empty.' do
-        expect({}.my_none?{ |(_k, v)| v.even? }).to be true
+        expect({}.my_none? { |(_k, v)| v.even? }).to be true
       end
 
       context 'when given a pattern.' do
@@ -153,10 +153,24 @@ RSpec.describe Enumerable do
           expect(hash.my_count(3)).to eq(0)
         end
       end
-      
+
       context 'when given an argument.' do
         it 'will return the number of elements yielding a true value.' do
-          expect(hash.my_count{ |(_k,v)| v.even? }).to eq(2)
+          expect(hash.my_count { |(_k, v)| v.even? }).to eq(2)
+        end
+      end
+    end
+
+    describe '#my_map' do
+      it 'will return a new array with the results of running block once for every element in enum.' do
+        expect(hash.my_map { |_k, v| v * 5 }).to eq [20, 15, 10, 5]
+        expect(hash.my_map { |_k, _v| 5 }).to eq [5, 5, 5, 5]
+      end
+
+      context 'when no block is given.' do
+        it 'will return an enumerator instead' do
+          expect(hash.my_map).to be_an(Enumerator)
+          expect(hash.my_map.to_a).to eq(hash.to_a)
         end
       end
     end

@@ -170,5 +170,20 @@ RSpec.describe Enumerable do
         end
       end
     end
+
+    describe '#my_map' do
+      it 'will return a new array with the results of running block once for every element in enum.' do
+        expect(array.my_map { |e| e * 5 }).to eq [5, 10, 15, 20]
+        expect(array.my_map { |_e| 5 }).to eq [5, 5, 5, 5]
+      end
+
+      context 'when no block is given.' do
+        it 'will return an enumerator instead' do
+          expect(array.my_map).to be_an(Enumerator)
+          expect(array.my_map.to_a).to eq(array)
+          expect(even_array.my_map.to_a).to eq(even_array)
+        end
+      end
+    end
   end
 end

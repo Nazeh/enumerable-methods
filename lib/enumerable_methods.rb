@@ -73,9 +73,10 @@ module Enumerable
     length
   end
 
-  def my_map(proc = nil)
+  def my_map
     res = []
-    proc ? my_each { |e| res << proc.call(e) } : my_each { |e| res << yield(e) }
+    return to_my_enum unless block_given?
+    my_each { |e| res << yield(e) }
     res
   end
 
