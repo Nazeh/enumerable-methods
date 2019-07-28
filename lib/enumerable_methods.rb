@@ -52,18 +52,18 @@ module Enumerable
     unless pattern.nil?
       return false if instance_of?(Hash)
 
-      return my_any? { |e| !pattern.match(e) }
+      return my_any? { |e| pattern.match(e) }
     end
 
-    return my_any?(&:!) unless block_given?
+    return my_any?{ |e| e } unless block_given?
 
-    my_each { |e| return true unless yield(e) }
+    my_each { |e| return true if yield(e) }
     false
   end
 
-  def my_none?
-    my_each { |e| return false if yield(e) }
-    true
+  def my_none?(*pattern)
+    return !my_any?(*pattern) unless block_given?
+    !my_any? { |e| yield(e)}
   end
 
   def my_count(arg = nil)
