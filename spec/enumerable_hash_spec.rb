@@ -174,5 +174,13 @@ RSpec.describe Enumerable do
         end
       end
     end
+
+    describe '#my_inject' do
+      context 'when given block' do
+        it 'will be passed an accumulator value (memo) and the element, for each element then return memo.' do
+          expect(hash.inject(5) { |sum, (_k, v)| sum + v }).to eq(15)
+        end
+      end
+    end
   end
 end

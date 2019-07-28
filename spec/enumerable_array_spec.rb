@@ -185,5 +185,29 @@ RSpec.describe Enumerable do
         end
       end
     end
+
+    describe '#my_inject' do
+      context 'when given block' do
+        it 'will be passed an accumulator value (memo) and the element, for each element then return memo.' do
+          expect(array.my_inject(5) { |sum, n| sum + n  }).to eq(15)
+        end
+        context 'when when no initial value for memo is  explicitly specify.' do
+          it 'will use the first element as the initial value of memo' do
+            expect(array.my_inject { |sum, n| sum + n }).to eq(10)
+          end
+        end
+      end
+
+      context 'when given symbol instead of block' do
+        it 'will be passed an accumulator value (memo) and the element, for each element then return memo.' do
+          expect(array.my_inject(5, :+)).to eq(15)
+        end
+        context 'when when no initial value for memo is  explicitly specify.' do
+          it 'will use the first element as the initial value of memo' do
+            expect(array.my_inject(:+)).to eq(10)
+          end
+        end
+      end
+    end
   end
 end
