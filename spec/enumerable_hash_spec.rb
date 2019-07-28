@@ -141,5 +141,24 @@ RSpec.describe Enumerable do
         end
       end
     end
+
+    describe '#my_count' do
+      it 'will return number of items in hash.' do
+        expect(hash.my_count).to eq(4)
+        expect(odd_hash.my_count).to eq(2)
+      end
+
+      context 'when given an argument.' do
+        it 'will return Zero because it cant take an argument of key-value pair' do
+          expect(hash.my_count(3)).to eq(0)
+        end
+      end
+      
+      context 'when given an argument.' do
+        it 'will return the number of elements yielding a true value.' do
+          expect(hash.my_count{ |(_k,v)| v.even? }).to eq(2)
+        end
+      end
+    end
   end
 end
