@@ -9,14 +9,15 @@ Implementation of some Enumerable Methods with Ruby, with support for Arrays and
 
 In this respositry I tried to replicate most of the behaviour of the original methods. however, there is two main differences:
 
-- Unlike **#each** which is provided be each enumerable object, **#my_each** on the other hand has to add special clause for each object type.
-
+- Unlike **#each** which is provided by each enumerable object, **#my_each** as to add special clause for each object type, input the key-value pair in parentheses.
+  
 - Unlike the original methods, you have to always input the key-value pair in paranthesis.
-  > hash.my_each { |(k, v)| result << "#{k}: #{v**2}" }
-  >
-  > hash.my_each_with_index { |(k, v), i| result << "#{k}: #{v**2}, i:#{i}" }
-  >
-  >hash.my_all? { |(_k, v)| v.even? }
+
+``` c
+hash.my_each { |(k, v)| result << "#{k}: #{v**2}" }
+hash.my_each_with_index { |(k, v), i| result << "#{k}: #{v**2}, i:#{i}" }
+hash.my_all? { |(_k, v)| v.even? }
+```
 
 - In **#my_select** method, you need to add special clause for each object type.
 

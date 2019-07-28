@@ -77,7 +77,7 @@ RSpec.describe Enumerable do
       end
 
       context 'when given a pattern.' do
-        it 'returns whether pattern === element for every element' do
+        it 'will return whether pattern === element for every element' do
           expect(%w[ant bear cat].my_all?(/t/)).to be false
           expect(%w[ant beat cat].my_all?(/t/)).to be true
         end
@@ -116,10 +116,10 @@ RSpec.describe Enumerable do
       end
 
       context 'when no block is given' do
-        it 'returns true if any element are neither false or nil.' do
+        it 'will return true if any element are neither false or nil.' do
           expect(array.my_any?).to be true
         end
-        it 'returns false if any element is false or nil.' do
+        it 'will return false if any element is false or nil.' do
           expect([true, false, nil].my_any?).to be true
           expect([false, nil].my_any?).to be false
         end
