@@ -36,7 +36,7 @@ gem install rspec
 ### Install
 
 ```console
-git clone https://github.com/Nazeh/enumerable-methods
+git clone git@github.com:Nazeh/enumerable-methods.git
 cd enumerable-methods
 ```
 
